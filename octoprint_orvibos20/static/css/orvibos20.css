@@ -1,0 +1,16 @@
+#navbar_plugin_orvibos20 > a > i.on {
+	color: #00FF00 !important;
+}
+
+#navbar_plugin_orvibos20 > a > i.off {
+	color: #FF0000 !important;
+}
+
+#navbar_plugin_orvibos20 > a > i.unknown {
+	color: #808080 !important;
+}
+
+#OrviboS20Editor table th, #OrviboS20Editor table td {
+	border-top: none;
+	vertical-align: top;
+}
