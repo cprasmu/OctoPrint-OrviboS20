@@ -519,7 +519,7 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 	def turn_off(self, plugip):
 		self._orvibos20_logger.debug("Turning off %s." % plugip)
 		d = Orvibo.discover(plugip)
-    	d.on = False
+		d.on = False
 
 		plug = self.plug_search(self._settings.get(["arrSmartplugs"]),"ip",plugip)
 		self._orvibos20_logger.debug(plug)
