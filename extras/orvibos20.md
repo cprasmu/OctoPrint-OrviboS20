@@ -1,31 +1,21 @@
 ---
 layout: plugin
 
-id: tplinksmartplug
-title: OctoPrint-TPLinkSmartplug
-description: Simple plugin to control TP-Link Smartplug
-author: jneilliii
+id: orvibos20
+title: OctoPrint-Orvibo-S20
+description: Simple plugin to control Orvibo S20 Smartplug
+author: cprasmu
 license: AGPLv3
 
 # TODO
-date: today's date in format YYYY-MM-DD, e.g. 2015-04-21
+date: today's date in format YYYY-MM-DD, e.g. 2019-09-20
 
-homepage: https://github.com/jneilliii/OctoPrint-TPLinkSmartplug
-source: https://github.com/jneilliii/OctoPrint-TPLinkSmartplug
-archive: https://github.com/jneilliii/OctoPrint-TPLinkSmartplug/archive/master.zip
+homepage: https://github.com/cprasmu/OctoPrint-OrviboS20
+source: https://github.com/cprasmu/OctoPrint-OrviboS20
+archive: https://github.com/cprasmu/OctoPrint-OrviboS20/archive/master.zip
 
-# TODO
-# Set this to true if your plugin uses the dependency_links setup parameter to include
-# library versions not yet published on PyPi. SHOULD ONLY BE USED IF THERE IS NO OTHER OPTION!
-#follow_dependency_links: false
 
-# TODO
-tags:
-- a list
-- of tags
-- that apply
-- to your plugin
-- (take a look at the existing plugins for what makes sense here)
+
 
 # TODO
 screenshots:
@@ -86,4 +76,4 @@ compatibility:
 ---
 
 **TODO**: Longer description of your plugin, configuration examples etc. This part will be visible on the page at
-http://plugins.octoprint.org/plugin/tplinksmartplug/
+http://github.com/cprasmu/OctoPrint-OrviboS20
