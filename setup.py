@@ -25,7 +25,7 @@ plugin_description = """Simple plugin to control Orvibo S20 socket"""
 plugin_author = "cprasmu"
 
 # The plugin's author's mail address.
-plugin_author_email = "cprasmu@gmail.com"
+plugin_author_email = "cprasmussen@hotmail.com"
 
 # The plugin's homepage URL. Can be overwritten within OctoPrint's internal data via __plugin_url__ in the plugin module
 plugin_url = "https://github.com/cprasmu/OctoPrint-OrviboS20"
