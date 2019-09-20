@@ -1,4 +1,4 @@
-# OctoPrint-TPLinkSmartplug
+# OctoPrint-OrviboS20
 
 Work inspired by [OctoPrint TP-Link WiFi SmartPlug](https://github.com/jneilliii/OctoPrint-TPLinkSmartplug), this plugin controls a TP-Link Smartplug via OctoPrint's nav bar.
 
@@ -19,7 +19,7 @@ or manually using this URL:
 
 ## Configuration
 
-Once installed go into settings and enter the ip address for your TP-Link Smartplug device. Adjust additional settings as needed.
+Once installed go into settings and enter the ip address for your Orvibo S20 device. Adjust additional settings as needed.
 
 ## Settings Explained
 - **IP**
