@@ -495,7 +495,6 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 
 	def turn_on(self, plugip):
 		self._orvibos20_logger.debug("Turning on %s." % plugip)
-
 		d = Orvibo.discover(plugip)
 
 		plug = self.plug_search(self._settings.get(["arrSmartplugs"]),"ip",plugip)
@@ -505,9 +504,12 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 			#chk = self.sendCommand('{"count_down":{"add_rule":{"enable":1,"delay":%s,"act":1,"name":"turn on"}}}' % plug["countdownOnDelay"],plug["ip"])["count_down"]["add_rule"]["err_code"]
 		#else:
 			#chk = self.sendCommand('{"system":{"set_relay_state":{"state":1}}}',plugip)["system"]["set_relay_state"]["err_code"]
-		chk = d.on(True)
+		#chk = d.on(True)
+		d.on = True
 
-		if chk == 0:
+		#if chk == 0:
+
+		if d.on == False:
 			self.check_status(plugip)
 			if plug["autoConnect"]:
 				c = threading.Timer(int(plug["autoConnectDelay"]),self._printer.connect)
@@ -518,11 +520,15 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 
 	def turn_off(self, plugip):
 		self._orvibos20_logger.debug("Turning off %s." % plugip)
-		d = Orvibo.discover(plugip)
-		d.on = False
+		#d = Orvibo.discover(plugip)
+		#d.on = False
 
 		plug = self.plug_search(self._settings.get(["arrSmartplugs"]),"ip",plugip)
 		self._orvibos20_logger.debug(plug)
+
+		d = Orvibo.discover(plugip)
+		d.on = False
+
 		#if plug["useCountdownRules"]:
 		#	self.sendCommand('{"count_down":{"delete_all_rules":null}}',plug["ip"])
 		#	chk = self.sendCommand('{"count_down":{"add_rule":{"enable":1,"delay":%s,"act":0,"name":"turn off"}}}' % plug["countdownOffDelay"],plug["ip"])["count_down"]["add_rule"]["err_code"]
@@ -535,9 +541,11 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 			time.sleep(int(plug["autoDisconnectDelay"]))
 
 		if not plug["useCountdownRules"]:
-			chk = d.on(False)
+			d.on = False
+			#chk = d.on(False)
 
-		if chk == 0:
+		#if chk == 0:
+		if d.on == False:
 			self.check_status(plugip)
 
 	def check_status(self, plugip):
@@ -546,13 +554,15 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 
 		if plugip != "":
 			chk = d.on
-			if chk == 1:
+			#if chk == 1:
+			if chk == True:
 				self._plugin_manager.send_plugin_message(self._identifier, dict(currentState="on",ip=plugip))
-			elif chk == 0:
+			elif chk == False:
+			#elif chk == 0:
 				self._plugin_manager.send_plugin_message(self._identifier, dict(currentState="off",ip=plugip))
-			else:
-				self._orvibos20_logger.debug(response)
-				self._plugin_manager.send_plugin_message(self._identifier, dict(currentState="unknown",ip=plugip))
+			#else:
+			#	self._orvibos20_logger.debug(response)
+			#	self._plugin_manager.send_plugin_message(self._identifier, dict(currentState="unknown",ip=plugip))
 
 	def get_api_commands(self):
 		return dict(turnOn=["ip"],turnOff=["ip"],checkStatus=["ip"])
