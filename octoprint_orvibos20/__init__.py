@@ -92,7 +92,7 @@ def _parse_discover_response(response):
     """
     header_len = len(MAGIC + DISCOVER_RESP) + 2 + 1  # 2 length bytes, and 0x00
     mac_len = 6
-    spaces_len = len(SPACES_6)
+    #spaces_len = len(SPACES_6)
 
     mac_start = header_len
     mac_end = mac_start + mac_len
@@ -241,7 +241,7 @@ class Orvibo(object):
 
     TYPE_SOCKET = 'socket'
 
-    def __init__(self, ip, mac = None, type = 'Unknown'):
+    def __init__(self, ip, mac = None, type = 'socket'):
         self.ip = ip
         self.type = type
         self.__last_subscr_time = time.time() - 1 # Orvibo doesn't like subscriptions frequently that 1 in 0.1sec
@@ -317,7 +317,7 @@ class Orvibo(object):
             discover_packet.compile(DISCOVER)
             discover_packet.send(s)
 
-            for indx in range(512): # supposer there are less then 512 devices in the network
+            for indx in range(512): # suppose there are less then 512 devices in the network
                 p = discover_packet.recv(s)
                 if p is None:
                     # No more packets in the socket
@@ -508,9 +508,9 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 		d.on = True
 
 		#if chk == 0:
+		self.check_status(plugip)
 
-		if d.on == False:
-			self.check_status(plugip)
+		if d.on == True:
 			if plug["autoConnect"]:
 				c = threading.Timer(int(plug["autoConnectDelay"]),self._printer.connect)
 				c.start()
