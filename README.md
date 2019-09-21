@@ -1,6 +1,7 @@
 # OctoPrint-OrviboS20
 
 Work inspired by [OctoPrint TP-Link WiFi SmartPlug](https://github.com/jneilliii/OctoPrint-TPLinkSmartplug), this plugin controls a TP-Link Smartplug via OctoPrint's nav bar.
+Python code to control the switch comes from [Orvibo](https://github.com/cherezov/orvibo)
 
 ##  Screenshots
 ![screenshot](screenshot.png)
