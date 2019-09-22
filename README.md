@@ -25,6 +25,8 @@ Once installed go into settings and enter the ip address for your Orvibo S20 dev
 ## Settings Explained
 - **IP**
   - IP or hostname of plug to control.
+- **MAC**
+- MAC address of plug to control. - do not include any seperators eg. 'accf23123456' . The MAC address can be found using arp command after pinging the device.
 - **Label**
   - Label to use for title attribute on hover over button in navbar.
 - **Icon Class**

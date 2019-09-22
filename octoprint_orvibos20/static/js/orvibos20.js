@@ -47,6 +47,7 @@ $(function() {
 
 		self.addPlug = function() {
 			self.selectedPlug({'ip':ko.observable(''),
+                                    'mac':ko.observable(''),
 									'label':ko.observable(''),
 									'icon':ko.observable('icon-bolt'),
 									'displayWarning':ko.observable(true),

@@ -398,7 +398,29 @@ class Orvibo(object):
 
             self.__logger.info('Socket is switched {} successfuly.'.format('on' if switchOn else 'off'))
             return True
+            
+    def forceOn(self, ip, mac):
+        on_off_packet = Packet(ip)
+        on_off_packet.compile(CONTROL, mac, SPACES_6, ZEROS_4, ON)
+        on_off_packet.send(s)
+        if on_off_packet.recv(s, CONTROL_RESP) is None:
+            self.__logger.warn('Socket switching on failed.')
+            return False
 
+        self.__logger.info('Socket is switched on successfuly.')
+        return True
+        
+    def forceOff(self, ip, mac):
+        on_off_packet = Packet(ip)
+        on_off_packet.compile(CONTROL, mac, SPACES_6, ZEROS_4, OFF)
+        on_off_packet.send(s)
+        if on_off_packet.recv(s, CONTROL_RESP) is None:
+            self.__logger.warn('Socket switching off failed.')
+            return False
+
+        self.__logger.info('Socket is switched off successfuly.')
+        return True
+        
     @property
     def on(self):
         """ State property for TYPE_SOCKET
@@ -449,7 +471,7 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 	def get_settings_defaults(self):
 		return dict(
 			debug_logging = False,
-			arrSmartplugs = [{'ip':'','label':'','icon':'icon-bolt','displayWarning':True,'warnPrinting':False,'gcodeEnabled':False,'gcodeOnDelay':0,'gcodeOffDelay':0,'autoConnect':True,'autoConnectDelay':10.0,'autoDisconnect':True,'autoDisconnectDelay':0,'sysCmdOn':False,'sysRunCmdOn':'','sysCmdOnDelay':0,'sysCmdOff':False,'sysRunCmdOff':'','sysCmdOffDelay':0,'currentState':'unknown','btnColor':'#808080','useCountdownRules':False,'countdownOnDelay':0,'countdownOffDelay':0}],
+			arrSmartplugs = [{'ip':'','mac':'','label':'','icon':'icon-bolt','displayWarning':True,'warnPrinting':False,'gcodeEnabled':False,'gcodeOnDelay':0,'gcodeOffDelay':0,'autoConnect':True,'autoConnectDelay':10.0,'autoDisconnect':True,'autoDisconnectDelay':0,'sysCmdOn':False,'sysRunCmdOn':'','sysCmdOnDelay':0,'sysCmdOff':False,'sysRunCmdOff':'','sysCmdOffDelay':0,'currentState':'unknown','btnColor':'#808080','useCountdownRules':False,'countdownOnDelay':0,'countdownOffDelay':0}],
 			pollingInterval = 15,
 			pollingEnabled = False
 		)
@@ -495,10 +517,14 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 
 	def turn_on(self, plugip):
 		self._orvibos20_logger.debug("Turning on %s." % plugip)
-		d = Orvibo.discover(plugip)
+		#d = Orvibo.discover(plugip)
+        
 
 		plug = self.plug_search(self._settings.get(["arrSmartplugs"]),"ip",plugip)
 		self._orvibos20_logger.debug(plug)
+        
+        d = Orvibo(plugip, plug['mac'], 'socket')
+        
 		#if plug["useCountdownRules"]:
 			#self.sendCommand('{"count_down":{"delete_all_rules":null}}',plug["ip"])
 			#chk = self.sendCommand('{"count_down":{"add_rule":{"enable":1,"delay":%s,"act":1,"name":"turn on"}}}' % plug["countdownOnDelay"],plug["ip"])["count_down"]["add_rule"]["err_code"]
@@ -526,7 +552,8 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 		plug = self.plug_search(self._settings.get(["arrSmartplugs"]),"ip",plugip)
 		self._orvibos20_logger.debug(plug)
 
-		d = Orvibo.discover(plugip)
+		#d = Orvibo.discover(plugip)
+        d = Orvibo(plugip, plug['mac'], 'socket')
 		d.on = False
 
 		#if plug["useCountdownRules"]:
