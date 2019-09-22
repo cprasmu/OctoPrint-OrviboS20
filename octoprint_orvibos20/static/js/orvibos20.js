@@ -141,11 +141,11 @@ $(function() {
         };
 
     	self.turnOff = function(data) {
-			if((data.displayWarning() || (self.isPrinting() && data.warnPrinting())) && !$("#OrviboS20Warning").is(':visible')){
+			if((data.displayWarning() || (self.isPrinting() && data.warnPrinting())) && !$("#OrviboS20PlugWarning").is(':visible')){
 				self.selectedPlug(data);
-				$("#OrviboS20Warning").modal("show");
+				$("#OrviboS20PlugWarning").modal("show");
 			} else {
-				$("#OrviboS20Warning").modal("hide");
+				$("#OrviboS20PlugWarning").modal("hide");
 /* 				if(data.sysCmdOff()){
 					setTimeout(function(){self.sysCommand(data.sysRunCmdOff())},data.sysCmdOffDelay()*1000);
 				} */
