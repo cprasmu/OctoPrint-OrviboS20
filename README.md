@@ -33,8 +33,6 @@ Once installed go into settings and enter the ip address for your Orvibo S20 dev
   - Always warn when checked.
 - **Warn While Printing**
   - Will only warn when printer is printing.
-- **Use Countdown Timers**
-  - Uses the plug's built in countdown timer rule to postpone the power on/off by configured delay in seconds.
 - **GCODE Trigger**
   - When checked this will enable the processing of M80 and M81 commands from gcode to power on/off plug.  Syntax for gcode command is M80/M81 followed by hostname/ip.  For example if your plug is 192.168.1.2 your gcode command would be **M80 192.168.1.2**
   - Added with version 0.1.0 you can now use the custom gcode commands `@ORVIBOON` and `@ORVIBOOFF` followed by the IP address of the plug.  This option will only work for plugs with GCODE processing enabled.  For example if your plug is 192.168.1.2 your gcode command would be **@ORVIBOON 192.168.1.2**
