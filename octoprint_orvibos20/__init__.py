@@ -499,15 +499,9 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 
 		plug = self.plug_search(self._settings.get(["arrSmartplugs"]),"ip",plugip)
 		self._orvibos20_logger.debug(plug)
-		#if plug["useCountdownRules"]:
-			#self.sendCommand('{"count_down":{"delete_all_rules":null}}',plug["ip"])
-			#chk = self.sendCommand('{"count_down":{"add_rule":{"enable":1,"delay":%s,"act":1,"name":"turn on"}}}' % plug["countdownOnDelay"],plug["ip"])["count_down"]["add_rule"]["err_code"]
-		#else:
-			#chk = self.sendCommand('{"system":{"set_relay_state":{"state":1}}}',plugip)["system"]["set_relay_state"]["err_code"]
-		#chk = d.on(True)
+
 		d.on = True
 
-		#if chk == 0:
 		self.check_status(plugip)
 
 		if d.on == True:
@@ -520,18 +514,12 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 
 	def turn_off(self, plugip):
 		self._orvibos20_logger.debug("Turning off %s." % plugip)
-		#d = Orvibo.discover(plugip)
-		#d.on = False
 
 		plug = self.plug_search(self._settings.get(["arrSmartplugs"]),"ip",plugip)
 		self._orvibos20_logger.debug(plug)
 
 		d = Orvibo.discover(plugip)
 		d.on = False
-
-		#if plug["useCountdownRules"]:
-		#	self.sendCommand('{"count_down":{"delete_all_rules":null}}',plug["ip"])
-		#	chk = self.sendCommand('{"count_down":{"add_rule":{"enable":1,"delay":%s,"act":0,"name":"turn off"}}}' % plug["countdownOffDelay"],plug["ip"])["count_down"]["add_rule"]["err_code"]
 
 		if plug["sysCmdOff"]:
 			t = threading.Timer(int(plug["sysCmdOffDelay"]),os.system,args=[plug["sysRunCmdOff"]])
@@ -540,13 +528,11 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 			self._printer.disconnect()
 			time.sleep(int(plug["autoDisconnectDelay"]))
 
-		if not plug["useCountdownRules"]:
-			d.on = False
-			#chk = d.on(False)
+		d.on = False
 
-		#if chk == 0:
 		if d.on == False:
 			self.check_status(plugip)
+
 
 	def check_status(self, plugip):
 		self._orvibos20_logger.debug("Checking status of %s." % plugip)
@@ -554,15 +540,13 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 
 		if plugip != "":
 			chk = d.on
-			#if chk == 1:
 			if chk == True:
+				self._orvibos20_logger.debug("%s appears to be on" % plugip)
 				self._plugin_manager.send_plugin_message(self._identifier, dict(currentState="on",ip=plugip))
 			elif chk == False:
-			#elif chk == 0:
+				self._orvibos20_logger.debug("%s appears to be off" % plugip)
 				self._plugin_manager.send_plugin_message(self._identifier, dict(currentState="off",ip=plugip))
-			#else:
-			#	self._orvibos20_logger.debug(response)
-			#	self._plugin_manager.send_plugin_message(self._identifier, dict(currentState="unknown",ip=plugip))
+
 
 	def get_api_commands(self):
 		return dict(turnOn=["ip"],turnOff=["ip"],checkStatus=["ip"])
@@ -591,7 +575,7 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 
 	def gcode_turn_off(self, plug):
 		if plug["warnPrinting"] and self._printer.is_printing():
-			self._logger.info("Not powering off %s because printer is printing." % plug["label"])
+			self._logger.info("Unable to power off %s because printer is printing." % plug["label"])
 		else:
 			self.turn_off(plug["ip"])
 
@@ -662,8 +646,8 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 
 # If you want your plugin to be registered within OctoPrint under a different name than what you defined in setup.py
 # ("OctoPrint-PluginSkeleton"), you may define that here. Same goes for the other metadata derived from setup.py that
-# can be overwritten via __plugin_xyz__ control properties. See the documentation for that.
-__plugin_name__ = "OctoPrint-OrviboS20"
+# can be overwritten via __plugin_xyz__ control properties. See the documentation for that. It was OctoPrint-OrviboS20.
+__plugin_name__ = "Orvibo S20"
 
 def __plugin_load__():
 	global __plugin_implementation__
