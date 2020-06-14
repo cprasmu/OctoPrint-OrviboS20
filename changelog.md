@@ -9,5 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release.
 
+## [0.2.3] - 2020-06-14
+### Added
+- Python 3 compatibility & error handling fixes.
 
 [0.1.0]: https://github.com/cprasmu/OctoPrint-OrviboS20/tree/0.1.0

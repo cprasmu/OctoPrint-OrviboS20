@@ -536,25 +536,24 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 
 	def check_status(self, plugip):
 		self._orvibos20_logger.debug("Checking status of %s." % plugip)
-		d = Orvibo.discover(plugip)
+		try:
+			d = Orvibo.discover(plugip)
 
-		if plugip != "":
-			chk = d.on
-			if chk == True:
-				self._orvibos20_logger.debug("%s appears to be on" % plugip)
-				self._plugin_manager.send_plugin_message(self._identifier, dict(currentState="on",ip=plugip))
-			elif chk == False:
-				self._orvibos20_logger.debug("%s appears to be off" % plugip)
-				self._plugin_manager.send_plugin_message(self._identifier, dict(currentState="off",ip=plugip))
-
+			if plugip != "":
+				chk = d.on
+				if chk == True:
+					self._orvibos20_logger.debug("%s appears to be on" % plugip)
+					self._plugin_manager.send_plugin_message(self._identifier, dict(currentState="on",ip=plugip))
+				elif chk == False:
+					self._orvibos20_logger.debug("%s appears to be off" % plugip)
+					self._plugin_manager.send_plugin_message(self._identifier, dict(currentState="off",ip=plugip))
+		except:
+			self._orvibos20_logger.debug("Error checking status of %s." % plugip)
 
 	def get_api_commands(self):
 		return dict(turnOn=["ip"],turnOff=["ip"],checkStatus=["ip"])
 
 	def on_api_command(self, command, data):
-		if not user_permission.can():
-			from flask import make_response
-			return make_response("Insufficient rights", 403)
 
 		if command == 'turnOn':
 			self.turn_on("{ip}".format(**data))
@@ -581,21 +580,37 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 
 	def processGCODE(self, comm_instance, phase, cmd, cmd_type, gcode, *args, **kwargs):
 		if gcode:
-			if cmd.startswith("M80"):
+			if cmd == "M80" or cmd.startswith("M80 "):
+				self._orvibos20_logger.debug("Received M80 command.")
 				plugip = re.sub(r'^M80\s?', '', cmd)
-				self._orvibos20_logger.debug("Received M80 command, attempting power on of %s." % plugip)
+				if not plugip:
+					self._orvibos20_logger.debug("Address was empty.")
+					if len(self._settings.get(["arrSmartplugs"])) == 1:
+						# we have a config entry
+						plugip = self._settings.get(["arrSmartplugs"])[0]['ip']
+						self._orvibos20_logger.debug("Using address from first config entry. ")
+
+				self._orvibos20_logger.debug("Attempting power on of %s." % plugip)
 				plug = self.plug_search(self._settings.get(["arrSmartplugs"]),"ip",plugip)
 				self._orvibos20_logger.debug(plug)
-				if plug["gcodeEnabled"]:
+				if plug is not None and plug["gcodeEnabled"]:
 					t = threading.Timer(int(plug["gcodeOnDelay"]),self.turn_on,args=[plugip])
 					t.start()
 				return
-			elif cmd.startswith("M81"):
+			elif cmd == "M81" or cmd.startswith("M81 "):
+				self._orvibos20_logger.debug("Received M81 command.")
 				plugip = re.sub(r'^M81\s?', '', cmd)
-				self._orvibos20_logger.debug("Received M81 command, attempting power off of %s." % plugip)
+				if not plugip:
+					self._orvibos20_logger.debug("Address was empty.")
+					if len(self._settings.get(["arrSmartplugs"])) == 1:
+						# we have a config entry
+						plugip = self._settings.get(["arrSmartplugs"])[0]['ip']
+						self._orvibos20_logger.debug("Using address from first config entry. ")
+
+				self._orvibos20_logger.debug("Attempting power off of %s." % plugip)
 				plug = self.plug_search(self._settings.get(["arrSmartplugs"]),"ip",plugip)
 				self._orvibos20_logger.debug(plug)
-				if plug["gcodeEnabled"]:
+				if plug is not None and plug["gcodeEnabled"]:
 					t = threading.Timer(int(plug["gcodeOffDelay"]),self.gcode_turn_off,[plug])
 					t.start()
 				return
