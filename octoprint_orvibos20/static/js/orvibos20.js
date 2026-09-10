@@ -97,6 +97,7 @@ $(function() {
 						new PNotify({
 							title: 'Orvibo S20 Socket Error',
 							text: 'Status ' + plug.currentState() + ' for ' + plug.ip() + '. Double check IP Address\\Hostname in OrviboS20 Settings.',
+							text_escape: true,
 							type: 'error',
 							hide: true
 							});
