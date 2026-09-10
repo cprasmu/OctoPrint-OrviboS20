@@ -4,7 +4,6 @@ from __future__ import absolute_import
 import octoprint.plugin
 from contextlib import contextmanager
 import socket
-import json
 import logging
 import os
 import re
@@ -323,7 +322,7 @@ class Orvibo(object):
                     break
 
                 orvibo_type, orvibo_mac = _parse_discover_response(p.data)
-                logger.debug('Discovered values: type={}, mac={}'.format(orvibo_type, orvibo_mac));
+                logger.debug('Discovered values: type={}, mac={}'.format(orvibo_type, orvibo_mac))
 
                 if not orvibo_mac:
                     # Filter ghosts devices
@@ -503,7 +502,7 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 
 		self.check_status(plugip)
 
-		if d.on == True:
+		if d.on:
 			if plug["autoConnect"]:
 				c = threading.Timer(int(plug["autoConnectDelay"]),self._printer.connect)
 				c.start()
@@ -529,7 +528,7 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 
 		d.on = False
 
-		if d.on == False:
+		if not d.on:
 			self.check_status(plugip)
 
 
@@ -540,10 +539,10 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 
 			if plugip != "":
 				chk = d.on
-				if chk == True:
+				if chk:
 					self._orvibos20_logger.debug("%s appears to be on" % plugip)
 					self._plugin_manager.send_plugin_message(self._identifier, dict(currentState="on",ip=plugip))
-				elif chk == False:
+				elif not chk:
 					self._orvibos20_logger.debug("%s appears to be off" % plugip)
 					self._plugin_manager.send_plugin_message(self._identifier, dict(currentState="off",ip=plugip))
 		except:
