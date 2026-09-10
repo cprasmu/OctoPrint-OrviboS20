@@ -2,7 +2,6 @@
 from __future__ import absolute_import
 
 import octoprint.plugin
-from octoprint.server import user_permission
 from contextlib import contextmanager
 import socket
 import json
