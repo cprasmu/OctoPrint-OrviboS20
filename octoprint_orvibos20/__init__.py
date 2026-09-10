@@ -554,6 +554,9 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 	def get_api_commands(self):
 		return dict(turnOn=["ip"],turnOff=["ip"],checkStatus=["ip"])
 
+	def is_api_protected(self):
+		return True
+
 	def on_api_command(self, command, data):
 
 		if command == 'turnOn':
