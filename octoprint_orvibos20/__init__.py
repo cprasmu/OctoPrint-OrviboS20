@@ -489,6 +489,9 @@ class orvibos20Plugin(octoprint.plugin.SettingsPlugin,
 			dict(type="settings", custom_bindings=True)
 		]
 
+	def is_template_autoescaped(self):
+		return True
+
 	##~~ SimpleApiPlugin mixin
 
 	def turn_on(self, plugip):
